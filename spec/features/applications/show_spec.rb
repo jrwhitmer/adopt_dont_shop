@@ -37,4 +37,22 @@ RSpec.describe 'application show page' do
 
     expect(page).to have_content("#{@application.status}")
   end
+
+  it 'has a section to add a pet to this application' do
+    visit "/applications/#{@application.id}"
+
+    expect(page).to have_content("Add a Pet to this Application")
+    expect(page).to have_css('#pet_search')
+    expect(page).to have_button('Search')
+  end
+
+  it 'redirects the user to show page with a list of matching pets' do
+    visit "/applications/#{@application.id}"
+
+    fill_in('Add a Pet to this Application', with: 'Scooby')
+    click_on('Search')
+
+    expect(current_path).to eq("/applications/#{@application.id}")
+    expect(page).to have_content('Scooby')
+  end
 end
