@@ -7,10 +7,6 @@ RSpec.describe 'application show page' do
     @pet_2 = Pet.create!(name: 'Breadbox', age: 5, breed: 'Golden Lab', adoptable: true, shelter_id: @shelter.id)
     @pet_3 = Pet.create!(name: 'Lemon', age: 12, breed: 'Chihuaha', adoptable: true, shelter_id: @shelter.id)
     @application = Application.create!(name: 'June Harrity', street_address: '123 Pine St', city: 'Loganville', state: 'Georiga', zip_code: 30052, description: 'Because I am awesome.', status: "In Progress")
-
-    @application.pets << @pet_1
-    @application.pets << @pet_2
-    @application.pets << @pet_3
   end
 
   it 'can show the name, full address, and description for the application' do
@@ -25,6 +21,9 @@ RSpec.describe 'application show page' do
   end
 
   it 'has name links to each pet associated with the application' do
+    @application.pets << @pet_1
+    @application.pets << @pet_2
+    @application.pets << @pet_3
     visit "/applications/#{@application.id}"
 
     expect(page).to have_link("#{@pet_1.name}", href: "/pets/#{@pet_1.id}")
@@ -54,5 +53,6 @@ RSpec.describe 'application show page' do
 
     expect(current_path).to eq("/applications/#{@application.id}")
     expect(page).to have_content('Scooby')
+    save_and_open_page
   end
 end

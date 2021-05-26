@@ -59,7 +59,6 @@ RSpec.describe 'application new page' do
     fill_in('State', with: 'Georgia')
     click_button('Submit')
 
-
     expect(current_path).to eq("/applications/new")
   end
 
@@ -73,7 +72,5 @@ RSpec.describe 'application new page' do
     click_button('Submit')
 
     expect(page).to have_content("Application not saved: Please fill in missing fields.")
-    # ask if the fields need to be specified or if this general statement is okay
-    # also ask if the filled in fields need to be stored/saved so the user only needs to fill in the missing ones
   end
 end
