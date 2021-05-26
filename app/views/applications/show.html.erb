@@ -1,12 +1,36 @@
-<h1>Name: <%= @application.name %></h1>
-<h2>Street: <%= @application.street_address %></h2>
-<h2>City: <%= @application.city %></h2>
-<h2>State: <%= @application.state %></h2>
-<h2>Zip Code:<%= @application.zip_code %></h2>
-<h3>Why I am a good fit: <%= @application.description %></h3>
+<section>
+  <h1>Name: <%= @application.name %></h1>
+  <h2>Street: <%= @application.street_address %></h2>
+  <h2>City: <%= @application.city %></h2>
+  <h2>State: <%= @application.state %></h2>
+  <h2>Zip Code: <%= @application.zip_code %></h2>
+  <h3>Why I am a good fit:</h3> <p><%= @application.description %></p>
+</section>
 
-<%= @application.pets.each do |pet| %>
-  <%= link_to "#{pet.name}", "/pets/#{pet.id}" %>
-<% end %>
+<section>
+  <%= @application.pets.each do |pet| %>
+    <%= link_to "#{pet.name}", "/pets/#{pet.id}" %>
+    <% end %>
+</section>
 
-<h2>Status <%= @application.status %></h2>
+<section>
+  <% if @application.status == "In Progress" %>
+    <%= form_with url: "/applications/#{@application.id}", method: :get do |form| %>
+      <%= form.hidden_field :_method, :value => :matching_pets %>
+      <%= form.label :pet_search, 'Add a Pet to this Application' %>
+      <%= form.text_field :pet_search %>
+      <%= form.submit 'Search' %>
+    <% end %>
+  <% end %>
+</section>
+
+<section>
+  <% if !@matching_pets.nil? %>
+    <h3>Matching Pets:</h3>
+    <% @matching_pets.each do |pet| %>
+      <p><%= pet.name %></p>
+      <% end %>
+    <% end %>
+</section>
+
+<h2>Status: </h2><p><%= @application.status %><p>

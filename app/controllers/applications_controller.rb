@@ -2,6 +2,10 @@ class ApplicationsController < ApplicationController
 
   def show
     @application = Application.find(params[:id])
+    if !params[:_method].nil?
+      @application = Application.find(params[:id])
+      @matching_pets = Pet.all.where("name = ?", "#{params[:pet_search]}")
+    end
   end
 
   def new
@@ -20,7 +24,7 @@ class ApplicationsController < ApplicationController
       redirect_to "/applications/#{@application.id}"
     else
       flash[:notice] = "Application not saved: Please fill in missing fields."
-      redirect_to "/applications/new" #render does not work here, why?
+      redirect_to "/applications/new"
     end
   end
 end

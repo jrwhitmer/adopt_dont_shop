@@ -7,10 +7,6 @@ RSpec.describe 'application show page' do
     @pet_2 = Pet.create!(name: 'Breadbox', age: 5, breed: 'Golden Lab', adoptable: true, shelter_id: @shelter.id)
     @pet_3 = Pet.create!(name: 'Lemon', age: 12, breed: 'Chihuaha', adoptable: true, shelter_id: @shelter.id)
     @application = Application.create!(name: 'June Harrity', street_address: '123 Pine St', city: 'Loganville', state: 'Georiga', zip_code: 30052, description: 'Because I am awesome.', status: "In Progress")
-
-    @application.pets << @pet_1
-    @application.pets << @pet_2
-    @application.pets << @pet_3
   end
 
   it 'can show the name, full address, and description for the application' do
@@ -25,6 +21,9 @@ RSpec.describe 'application show page' do
   end
 
   it 'has name links to each pet associated with the application' do
+    @application.pets << @pet_1
+    @application.pets << @pet_2
+    @application.pets << @pet_3
     visit "/applications/#{@application.id}"
 
     expect(page).to have_link("#{@pet_1.name}", href: "/pets/#{@pet_1.id}")
@@ -36,5 +35,33 @@ RSpec.describe 'application show page' do
     visit "/applications/#{@application.id}"
 
     expect(page).to have_content("#{@application.status}")
+  end
+
+  it 'has a section to add a pet to this application' do
+    visit "/applications/#{@application.id}"
+
+    expect(page).to have_content("Add a Pet to this Application")
+    expect(page).to have_css('#pet_search')
+    expect(page).to have_button('Search')
+  end
+
+  it 'redirects the user to show page with a list of matching pets' do
+    visit "/applications/#{@application.id}"
+
+    fill_in('Add a Pet to this Application', with: 'Scooby')
+    click_on('Search')
+
+    expect(current_path).to eq("/applications/#{@application.id}")
+    expect(page).to have_content('Scooby')
+  end
+
+  it 'only shows the user the pet search form if the application is in progress' do
+    @application_submitted = Application.create!(name: 'June Harrity', street_address: '123 Pine St', city: 'Loganville', state: 'Georiga', zip_code: 30052, description: 'Because I am awesome.', status: "Submitted")
+    
+    visit "/applications/#{@application_submitted.id}"
+
+    expect(page).to have_no_content("Add a Pet to this Application")
+    expect(page).to have_no_css('#pet_search')
+    expect(page).to have_no_button('Search')
   end
 end
