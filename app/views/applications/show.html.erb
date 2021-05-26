@@ -14,11 +14,13 @@
 </section>
 
 <section>
-  <%= form_with url: "/applications/#{@application.id}", method: :get do |form| %>
-    <%= form.hidden_field :_method, :value => :matching_pets %>
-    <%= form.label :pet_search, 'Add a Pet to this Application' %>
-    <%= form.text_field :pet_search %>
-    <%= form.submit 'Search' %>
+  <% if @application.status == "In Progress" %>
+    <%= form_with url: "/applications/#{@application.id}", method: :get do |form| %>
+      <%= form.hidden_field :_method, :value => :matching_pets %>
+      <%= form.label :pet_search, 'Add a Pet to this Application' %>
+      <%= form.text_field :pet_search %>
+      <%= form.submit 'Search' %>
+    <% end %>
   <% end %>
 </section>
 
