@@ -4,9 +4,12 @@ class ApplicationsController < ApplicationController
     @application = Application.find(params[:id])
     if !params[:_method].nil?
       @application = Application.find(params[:id])
-      @matching_pets = Pet.search_by_name("#{params[:pet_search]}")
+      @matching_pets = Pet.search("#{params[:pet_search]}")
     end
     @pets = @application.pets
+    if @application.status != "In Progress"
+      @described = true
+    end
   end
 
   def update
