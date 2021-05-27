@@ -129,4 +129,15 @@ RSpec.describe 'application show page' do
     expect(page).to have_content("Pending")
     expect(page).to have_link("#{@pet_1.name}", href: "/pets/#{@pet_1.id}")
   end
+
+  it 'has no submission section on show page if no pets have been added' do
+    visit "/applications/#{@application.id}"
+
+    fill_in('Add a Pet to this Application', with: 'Scooby')
+    click_on('Search')
+
+    expect(page).to have_no_css('#description')
+    expect(page).to have_no_content('Please write a description of why you would make a good owner for these pet(s):')
+    expect(page).to have_no_button('Submit Application')
+  end
 end
