@@ -24,6 +24,12 @@ RSpec.describe Pet, type: :model do
       it 'returns partial matches' do
         expect(Pet.search("Claw")).to eq([@pet_2])
       end
+
+      describe '#search_by_name' do
+        it 'returns pets whose name match the argument' do
+          expect(Pet.search_by_name("Mr. Pirate")).to eq([@pet_1])
+        end
+      end
     end
 
     describe '#adoptable' do
@@ -31,6 +37,7 @@ RSpec.describe Pet, type: :model do
         expect(Pet.adoptable).to eq([@pet_1, @pet_2])
       end
     end
+
   end
 
   describe 'instance methods' do

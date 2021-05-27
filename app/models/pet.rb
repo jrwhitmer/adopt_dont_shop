@@ -13,11 +13,7 @@ class Pet < ApplicationRecord
     where(adoptable: true)
   end
 
-  def self.matching_pets(params)
-    where("name = ?", params)
-  end
-
   def self.search_by_name(params)
-    where('name = ?', params).limit(1)
+    where('name = ?', params)
   end
 end
