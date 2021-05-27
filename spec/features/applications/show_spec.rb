@@ -132,7 +132,6 @@ RSpec.describe 'application show page' do
 
   it 'has no submission section on show page if no pets have been added' do
     visit "/applications/#{@application.id}"
-
     fill_in('Add a Pet to this Application', with: 'Scooby')
     click_on('Search')
 
