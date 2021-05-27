@@ -6,6 +6,16 @@ class ApplicationsController < ApplicationController
       @application = Application.find(params[:id])
       @matching_pets = Pet.search_by_name("#{params[:pet_search]}")
     end
+    @pets = @application.pets
+  end
+
+  def update
+    @application = Application.find(params[:id])
+    @application.update(
+      description: params[:description],
+      status: "Pending"
+    )
+    redirect_to "/applications/#{@application.id}"
   end
 
   def new

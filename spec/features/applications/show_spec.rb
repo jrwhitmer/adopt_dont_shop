@@ -84,4 +84,49 @@ RSpec.describe 'application show page' do
     expect(current_path).to eq("/applications/#{@application.id}")
     expect(page).to have_link("#{@pet_1.name}", href: "/pets/#{@pet_1.id}")
   end
+
+  it 'displays a submission section after at least one pet is added to the application where user can add description to application' do
+    visit "/applications/#{@application.id}"
+
+    fill_in('Add a Pet to this Application', with: 'Scooby')
+    click_on('Search')
+    click_on('Adopt this Pet')
+
+    expect(page).to have_css('#description')
+    expect(page).to have_content('Please write a description of why you would make a good owner for these pet(s):')
+    expect(page).to have_button('Submit Application')
+  end
+
+  it 'redirects the user to the application show page when application is submitted' do
+    visit "/applications/#{@application.id}"
+
+    fill_in('Add a Pet to this Application', with: 'Scooby')
+    click_on('Search')
+    click_on('Adopt this Pet')
+
+    fill_in('Please write a description of why you would make a good owner for these pet(s):', with: 'I would be very kind and loving to Scooby and make sure he is happy and healthy as long as he lives.')
+    click_on('Submit Application')
+
+    expect(current_path).to eq("/applications/#{@application.id}")
+  end
+
+  it 'displays only the pets on the application, the applicant information, and a pending status on the show page after submission' do
+    visit "/applications/#{@application.id}"
+
+    fill_in('Add a Pet to this Application', with: 'Scooby')
+    click_on('Search')
+    click_on('Adopt this Pet')
+
+    fill_in('Please write a description of why you would make a good owner for these pet(s):', with: 'I would be very kind and loving to Scooby and make sure he is happy and healthy as long as he lives.')
+    click_on('Submit Application')
+
+    expect(page).to have_content("#{@application.name}")
+    expect(page).to have_content("#{@application.street_address}")
+    expect(page).to have_content("#{@application.city}")
+    expect(page).to have_content("#{@application.state}")
+    expect(page).to have_content("#{@application.zip_code}")
+    expect(page).to have_content("I would be very kind and loving to Scooby and make sure he is happy and healthy as long as he lives.")
+    expect(page).to have_content("Pending")
+    expect(page).to have_link("#{@pet_1.name}", href: "/pets/#{@pet_1.id}")
+  end
 end
