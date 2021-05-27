@@ -4,7 +4,7 @@ class ApplicationsController < ApplicationController
     @application = Application.find(params[:id])
     if !params[:_method].nil?
       @application = Application.find(params[:id])
-      @matching_pets = Pet.all.where("name = ?", "#{params[:pet_search]}")
+      @matching_pets = Pet.search_by_name("#{params[:pet_search]}")
     end
   end
 

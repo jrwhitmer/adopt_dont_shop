@@ -57,11 +57,31 @@ RSpec.describe 'application show page' do
 
   it 'only shows the user the pet search form if the application is in progress' do
     @application_submitted = Application.create!(name: 'June Harrity', street_address: '123 Pine St', city: 'Loganville', state: 'Georiga', zip_code: 30052, description: 'Because I am awesome.', status: "Submitted")
-    
+
     visit "/applications/#{@application_submitted.id}"
 
     expect(page).to have_no_content("Add a Pet to this Application")
     expect(page).to have_no_css('#pet_search')
     expect(page).to have_no_button('Search')
+  end
+
+  it 'has a button next to all matching pets to add the pet to an application' do
+    visit "/applications/#{@application.id}"
+
+    fill_in('Add a Pet to this Application', with: 'Scooby')
+    click_on('Search')
+
+    expect(page).to have_button('Adopt this Pet')
+  end
+
+  it 'updates the application to have the pet selected from search on the application' do
+    visit "/applications/#{@application.id}"
+
+    fill_in('Add a Pet to this Application', with: 'Scooby')
+    click_on('Search')
+    click_on('Adopt this Pet')
+
+    expect(current_path).to eq("/applications/#{@application.id}")
+    expect(page).to have_link("#{@pet_1.name}", href: "/pets/#{@pet_1.id}")
   end
 end
