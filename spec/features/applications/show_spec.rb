@@ -139,4 +139,36 @@ RSpec.describe 'application show page' do
     expect(page).to have_no_content('Please write a description of why you would make a good owner for these pet(s):')
     expect(page).to have_no_button('Submit Application')
   end
+
+  it 'can return partial name matches for pet searches' do
+    @pet_4 = Pet.create!(name: 'Fluff', age: 2, breed: 'Great Dane', adoptable: true, shelter_id: @shelter.id)
+    @pet_5 = Pet.create!(name: 'Fluffers', age: 5, breed: 'Golden Lab', adoptable: true, shelter_id: @shelter.id)
+    @pet_6 = Pet.create!(name: 'Fluffy', age: 12, breed: 'Chihuaha', adoptable: true, shelter_id: @shelter.id)
+
+    visit "/applications/#{@application.id}"
+
+    fill_in('Add a Pet to this Application', with: 'Fluff')
+    click_on('Search')
+
+    expect(current_path).to eq("/applications/#{@application.id}")
+    expect(page).to have_content('Fluff')
+    expect(page).to have_content('Fluffers')
+    expect(page).to have_content('Fluffy')
+  end
+
+  it 'can search for pets ignoring case' do
+    @pet_4 = Pet.create!(name: 'Fluff', age: 2, breed: 'Great Dane', adoptable: true, shelter_id: @shelter.id)
+    @pet_5 = Pet.create!(name: 'Fluffers', age: 5, breed: 'Golden Lab', adoptable: true, shelter_id: @shelter.id)
+    @pet_6 = Pet.create!(name: 'Fluffy', age: 12, breed: 'Chihuaha', adoptable: true, shelter_id: @shelter.id)
+
+    visit "/applications/#{@application.id}"
+
+    fill_in('Add a Pet to this Application', with: 'fluff')
+    click_on('Search')
+
+    expect(current_path).to eq("/applications/#{@application.id}")
+    expect(page).to have_content('Fluff')
+    expect(page).to have_content('Fluffers')
+    expect(page).to have_content('Fluffy')
+  end
 end
