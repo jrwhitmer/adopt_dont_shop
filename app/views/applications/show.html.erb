@@ -29,8 +29,12 @@
     <h3>Matching Pets:</h3>
     <% @matching_pets.each do |pet| %>
       <p><%= pet.name %></p>
+      <%= form_with url: "/applications/#{@application.id}/pets", method: :post do |form| %>
+        <%= form.hidden_field :_method, :value => pet.name %>
+        <%= form.submit 'Adopt this Pet' %>
       <% end %>
     <% end %>
+  <% end %>
 </section>
 
 <h2>Status: </h2><p><%= @application.status %><p>
