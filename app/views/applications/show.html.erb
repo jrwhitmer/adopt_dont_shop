@@ -37,4 +37,15 @@
   <% end %>
 </section>
 
+<section>
+  <% if !@pets.nil? && @described.nil? %>
+    <%= form_with url: "/applications/#{@application.id}", method: :patch do |form| %>
+      <%= form.label :description, 'Please write a description of why you would make a good owner for these pet(s):' %>
+      <%= form.text_field :description %>
+      <%= form.submit 'Submit Application' %>
+    <% end %>
+    <% @described = true %>
+  <% end %>
+</section>
+
 <h2>Status: </h2><p><%= @application.status %><p>

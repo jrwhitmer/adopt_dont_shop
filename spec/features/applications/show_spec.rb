@@ -125,9 +125,8 @@ RSpec.describe 'application show page' do
     expect(page).to have_content("#{@application.city}")
     expect(page).to have_content("#{@application.state}")
     expect(page).to have_content("#{@application.zip_code}")
-    expect(page).to have_content("#{@application.description}")
-    expect(page).to have_content("#{@application.status}")
-    expect(@application.status).to eq("Pending")
+    expect(page).to have_content("I would be very kind and loving to Scooby and make sure he is happy and healthy as long as he lives.")
+    expect(page).to have_content("Pending")
     expect(page).to have_link("#{@pet_1.name}", href: "/pets/#{@pet_1.id}")
   end
 end
