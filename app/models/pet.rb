@@ -16,4 +16,7 @@ class Pet < ApplicationRecord
   def self.search_by_name(params)
     where('name = ?', params)
   end
+
+  
+
 end

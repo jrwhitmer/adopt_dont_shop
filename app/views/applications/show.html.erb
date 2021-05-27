@@ -8,7 +8,7 @@
 </section>
 
 <section>
-  <%= @application.pets.each do |pet| %>
+  <% @application.pets.each do |pet| %>
     <%= link_to "#{pet.name}", "/pets/#{pet.id}" %>
     <% end %>
 </section>
@@ -44,7 +44,6 @@
       <%= form.text_field :description %>
       <%= form.submit 'Submit Application' %>
     <% end %>
-    <% @described = true %>
   <% end %>
 </section>
 
